@@ -1,0 +1,16 @@
+pandas 
+numpy 
+scikit-learn
+matplotlib
+seaborn
+joblib
+flask
+flask-cors
+scipy
+python-box
+pyYAML
+ensure
+types-pyYAML
+mlflow
+
+# -e .
