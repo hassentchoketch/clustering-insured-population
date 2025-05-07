@@ -2,12 +2,15 @@ import os
 import sys
 import logging
 
-logging_str ="[%(asctime)s: %(levelname)s: %(module)s: %(message)s]"
+# format for logging
+logging_str ="[%(asctime)s: %(levelname)s: %(module)s: %(message)s]" 
 
+# create a directory for logs if it doesn't exist
 log_dir = "logs"
 log_filepath = os.path.join(log_dir,"runnig_logs.log")
 os.makedirs(log_dir,exist_ok=True)
 
+# set up logging to file and console
 logging.basicConfig(
     filename=log_dir, 
     level=logging.INFO, 
