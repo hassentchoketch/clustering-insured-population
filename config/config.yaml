@@ -1,0 +1,15 @@
+artifacts_root: artifacts
+
+
+data_ingestion:
+  root_dir: artifacts/data_ingestion
+  sas: research/a2z_insurance.sas7bdat
+  csv: artifacts/data_ingestion/data.csv
+  
+
+
+
+    
+
+
+   

@@ -10,7 +10,7 @@ from typing import Any
 
 
 @ensure_annotations
-def load_yaml(file_path: str) -> ConfigBox:
+def read_yaml(file_path: str) -> ConfigBox:
     """
     Load a YAML file and return its contents as a ConfigBox object.
     
@@ -30,19 +30,17 @@ def load_yaml(file_path: str) -> ConfigBox:
         raise e
 
 @ensure_annotations
-def create_directories(dirs: list,verbose=True) -> None:
-    """
-    Create directories if they do not exist.
-    
+def create_directories(path_to_directories: list, verbose=True):
+    """create list of directories
+
     Args:
-        dirs (list): List of directory paths to create.
-        
-    Returns:
-        None
+        path_to_directories (list): list of path of directories
+        ignore_log (bool, optional): ignore if multiple dirs is to be created. Defaults to False.
     """
-    for dir in dirs:
-        os.makedirs(dir, exist_ok=True)
-        logger.info(f"Directory created: {dir}")
+    for path in path_to_directories:
+        os.makedirs(path, exist_ok=True)
+        if verbose:
+            logger.info(f"created directory at: {path}")
         
 @ensure_annotations
 def save_json(file_path: str, data: dict) -> None:

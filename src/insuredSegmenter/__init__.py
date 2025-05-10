@@ -12,11 +12,13 @@ os.makedirs(log_dir,exist_ok=True)
 
 # set up logging to file and console
 logging.basicConfig(
-    filename=log_dir, 
     level=logging.INFO, 
     format=logging_str,
-    handlers=[logging.FileHandler(filename=log_filepath),
+    handlers=[
+            logging.FileHandler(log_filepath),
             logging.StreamHandler(sys.stdout)]
 )
 
-logging.info("Logging has been set up.")
+logger = logging.getLogger('insuredSegmeterLogger')
+
+
