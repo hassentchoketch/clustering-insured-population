@@ -1,0 +1,34 @@
+# Parameters for K-Means Clustering
+kmeans:
+  n_clusters: 8          # Number of clusters to form
+  # init: 'k-means++'       # Method for initialization ('k-means++', 'random', or ndarray)
+  # n_init: 10              # Number of times the algorithm will run with different centroid seeds
+  # max_iter: 300           # Maximum number of iterations for a single run
+  # tol: 0.0001             # Relative tolerance with regards to inertia to declare convergence
+  # random_state: null      # Seed for random number generation (int or None)
+  # algorithm: 'lloyd'      # Algorithm to use ('lloyd', 'elkan', or 'auto')
+  # verbose: 0              # Verbosity mode (0 for silent, >0 for detailed output)
+  # copy_x: true            # Whether to copy the input data or modify it in-place
+  # n_jobs: null            # Number of parallel jobs to run (-1 for all processors)
+
+# online_kmeans:
+#     n_clusters: 8          # Number of clusters to form
+#     init: 'k-means++'       # Method for initialization ('k-means++', 'random', or ndarray)
+#     max_iter: 300           # Maximum number of iterations for a single run
+#     tol: 0.0001             # Relative tolerance with regards to inertia to declare convergence
+#     random_state: null      # Seed for random number generation (int or None)
+#     verbose: 0              # Verbosity mode (0 for silent, >0 for detailed output)
+#     batch_size: 100         # Size of the mini-batches
+#     reassignment_ratio: 0.01 # Ratio of reassigned points to total points
+
+# HDBSCAN:
+#   min_cluster_size: 5     # Minimum size of clusters
+#   min_samples: 1          # Minimum number of samples in a neighborhood for a point to be considered a core point
+#   metric: 'euclidean'     # Distance metric to use ('euclidean', 'manhattan', etc.)
+#   cluster_selection_method: 'eom' # Method for cluster selection ('eom' or 'leaf')
+#   alpha: 1.0              # Parameter for the cluster selection method
+#   prediction_data: false   # Whether to compute prediction data (for outlier detection)
+#   gen_min_span_tree: false # Whether to generate the minimum spanning tree
+#   allow_single_cluster: false # Whether to allow a single cluster to be formed
+
+
