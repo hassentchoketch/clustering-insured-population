@@ -7,6 +7,12 @@ from pathlib import Path
 from ensure import ensure_annotations
 from box import ConfigBox
 from typing import Any
+import numpy as np
+import pandas as pd
+from scipy import stats
+from sklearn.base import BaseEstimator, TransformerMixin
+import pickle
+
 
 
 @ensure_annotations
@@ -122,6 +128,7 @@ def load_bin(file_path: str) -> Any:
 
 @ensure_annotations
 def get_size(file_path: str) -> int:
+    
     """
     Get the size of a file in Kbytes.
     
@@ -138,3 +145,90 @@ def get_size(file_path: str) -> int:
     except Exception as e:
         logger.error(f"Error getting file size: {e}")
         raise e
+    
+@ensure_annotations
+def _load_object(file_path: Path):
+        """
+        This function is used to load a pickled object from the specified path.
+        """
+        try:
+            with open(file_path, 'rb') as file:
+                return pickle.load(file)
+        except Exception as e:
+            raise (e)
+
+class OutlierRemover(BaseEstimator, TransformerMixin):
+    """
+    Custom transformer to remove outliers using Z-score method.
+    This implements scikit-learn's transformer interface.
+    """
+    def __init__(self, z_threshold=3.0):
+        self.z_threshold = z_threshold
+        self.feature_indices_ = None
+        
+    def fit(self, X, y=None):
+        # Store indices of features with outliers to be used in transform
+        return self
+        
+    def transform(self, X):
+        if isinstance(X, pd.DataFrame):
+            X_transformed = X.copy()
+            # Apply z-score thresholding to each column
+            for col in X_transformed.columns:
+                if X_transformed[col].dtype in [np.float64, np.int64]:
+                    z_scores = np.abs(stats.zscore(X_transformed[col], nan_policy='omit'))
+                    X_transformed.loc[z_scores >= self.z_threshold, col] = np.nan
+            return X_transformed
+        else:
+            # If not DataFrame, convert to numpy array
+            X_transformed = np.copy(X)
+            # Apply z-score thresholding to each column
+            for col in range(X_transformed.shape[1]):
+                z_scores = np.abs(stats.zscore(X_transformed[:, col], nan_policy='omit'))
+                X_transformed[z_scores >= self.z_threshold, col] = np.nan
+            return X_transformed
+
+class SkewnessTransformer(BaseEstimator, TransformerMixin):
+    """
+    Custom transformer to handle skewed data automatically.
+    Applies log transformation to highly skewed features.
+    """
+    def __init__(self, skew_threshold=1.0):
+        self.skew_threshold = skew_threshold
+        self.skewed_features_ = {}  # Will store skewed features and their min values
+    
+    def fit(self, X, y=None):
+        # Identify skewed features
+        if isinstance(X, pd.DataFrame):
+            for col in X.columns:
+                if X[col].dtype in [np.float64, np.int64]:
+                    skewness = X[col].skew()
+                    if abs(skewness) > self.skew_threshold:
+                        # Store min value to use in transformation
+                        min_val = X[col].min()
+                        self.skewed_features_[col] = min_val
+        else:
+            # For numpy arrays, we'll transform all numeric columns
+            for col in range(X.shape[1]):
+                if np.issubdtype(X[:, col].dtype, np.number):
+                    # Use pandas Series for skew calculation
+                    skewness = pd.Series(X[:, col]).skew()
+                    if abs(skewness) > self.skew_threshold:
+                        min_val = np.min(X[:, col])
+                        self.skewed_features_[col] = min_val
+        return self
+    
+    def transform(self, X):
+        X_transformed = X.copy() if isinstance(X, pd.DataFrame) else np.copy(X)
+        
+        if isinstance(X, pd.DataFrame):
+            for col, min_val in self.skewed_features_.items():
+                if col in X_transformed.columns:
+                    # Apply log transformation (adding small constant to handle zeros)
+                    X_transformed[col] = np.log1p(X_transformed[col] - min_val + 0.01)
+        else:
+            for col, min_val in self.skewed_features_.items():
+                # Apply log transformation to numpy array
+                X_transformed[:, col] = np.log1p(X_transformed[:, col] - min_val + 0.01)
+                
+        return X_transformed
