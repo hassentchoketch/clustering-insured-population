@@ -38,3 +38,14 @@ class TrainingConfig:
     param_n_clusters: int
     
     
+@dataclass
+class ModelEvaluationConfig:
+    """
+    Class to hold the evaluation results of a model.
+    """
+    root_dir: Path
+    transformed_data_path: Path
+    model_path: Path
+    all_params: dict
+    metric_file_name: Path
+    visualisation_path: Path

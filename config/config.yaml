@@ -24,4 +24,9 @@ train_model:
   trained_model_path: artifacts/train_model/model.pkl
   
 
-   
+model_evaluation:
+  root_dir: artifacts/model_evaluation
+  model_path: artifacts/train_model/model.pkl
+  model_evaluation_plot_path: artifacts/model_evaluation/evaluation_plot.png
+  model_evaluation_metric_path: artifacts/model_evaluation/evaluation_metric.pkl
+  model_evaluation_report_path: artifacts/model_evaluation/report.pkl  

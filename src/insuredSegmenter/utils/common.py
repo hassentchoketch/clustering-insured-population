@@ -49,25 +49,29 @@ def create_directories(path_to_directories: list, verbose=True):
             logger.info(f"created directory at: {path}")
         
 @ensure_annotations
-def save_json(file_path: str, data: dict) -> None:
-    """
-    Save a dictionary to a JSON file.
+def save_json(path: Path, data: dict):
+    """Save data as JSON file"""
+    with open(path, "w") as f:
+        json.dump(data, f, indent=4)
+# def save_json(file_path: Path, data: dict) -> None:
+#     """
+#     Save a dictionary to a JSON file.
     
-    Args:
-        file_path (str): Path to the JSON file.
-        data (dict): Dictionary to save.
+#     Args:
+#         file_path (str): Path to the JSON file.
+#         data (dict): Dictionary to save.
         
-    Returns:
-        None
-    """
-    try:
-        with open(file_path, 'w') as file:
-            json.dump(data, file, indent=4)
-            logger.info(f"JSON file saved successfully: {file_path}")
-    except Exception as e:
-        logger.error(f"Error saving JSON file: {e}")
-        raise e
-    
+#     Returns:
+#         None
+#     """
+#     try:
+#         with open(file_path, 'w') as file:
+#             json.dump(data, file, indent=4)
+#             logger.info(f"JSON file saved successfully: {file_path}")
+#     except Exception as e:
+#         logger.error(f"Error saving JSON file: {e}")
+#         raise e
+
 @ensure_annotations
 def load_json(file_path: str) -> dict:
     """

@@ -1,4 +1,4 @@
-from insuredSegmenter.entity.config_entity import DataIngestionConfig , DataTransformationConfig, PreparBaseModelConfig ,TrainingConfig
+from insuredSegmenter.entity.config_entity import DataIngestionConfig , DataTransformationConfig, PreparBaseModelConfig ,TrainingConfig, ModelEvaluationConfig
 from insuredSegmenter.constants import *
 from insuredSegmenter.utils.common import create_directories, read_yaml
 
@@ -81,3 +81,21 @@ class ConfigurationManager:
         )
         return training_config
     
+    def get_model_evaluation_config(self) -> ModelEvaluationConfig:
+        config = self.config.model_evaluation
+        params = self.params.kmeans
+
+        create_directories([config.root_dir])
+
+        model_evaluation_config = ModelEvaluationConfig(
+            root_dir=config.root_dir,
+            transformed_data_path= self.config.data_transformation.transformed_data_path,
+            model_path = config.model_path,
+            all_params=params,
+            metric_file_name = config.model_evaluation_metric_path,
+            visualisation_path=config.model_evaluation_plot_path
+            
+           
+        )
+
+        return model_evaluation_config

@@ -1,7 +1,8 @@
 from insuredSegmenter.pipeline.stage_01_data_igestion import DataIngestionPipeline
 from insuredSegmenter.pipeline.stage_02_data_transformation import DataTransformationPipeline
 from insuredSegmenter.pipeline.stage_03_prepare_base_model import PrepareBaseModelPipeline 
-from insuredSegmenter.pipeline.stage_04_model_trainer import TrainingPipeline    
+from insuredSegmenter.pipeline.stage_04_model_trainer import TrainingPipeline  
+from insuredSegmenter.pipeline.stage_05_model_evaluation import EvaluationPipeline
 from insuredSegmenter import logger
 
 
@@ -53,4 +54,16 @@ try:
     logger.info("Training stage completed")
 except Exception as e:
     logger.error(f"Error occurred in training stage: {e}")
+    raise e
+
+STAGE_NAME = "Evaluation Stage"
+
+try:
+    logger.info(f"\n\n{'*'*20} {STAGE_NAME} {'*'*20}\n\n")
+    logger.info("Starting evaluation stage")
+    evaluation = EvaluationPipeline()
+    evaluation.start_evaluation()
+    logger.info("Evaluation stage completed")
+except Exception as e:
+    logger.error(f"Error occurred in Evaluation stage: {e}")
     raise e
